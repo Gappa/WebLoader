@@ -57,7 +57,7 @@ class LoaderFactory
 		$lName = strtolower($name);
 		$tempPath = $this->tempPaths[$lName] ?? Extension::DEFAULT_TEMP_PATH;
 		$method = $absoluteUrl ? 'getBaseUrl' : 'getBasePath';
-		return rtrim($this->httpRequest->getUrl()->{$method}(), '/') . '/' . $tempPath;
+		return rtrim($this->httpRequest->getUrl()->withoutUserInfo()->{$method}(), '/') . '/' . $tempPath;
 	}
 
 
