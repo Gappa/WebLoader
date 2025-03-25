@@ -203,7 +203,12 @@ class Compiler
 			return null;
 		}
 
-		$watchFiles = $this->checkLastModified ? array_unique(array_merge($files, $this->collection->getWatchFiles())) : [];
+		if ($this->checkLastModified) {
+			$watchFiles = array_unique(array_merge($files, $this->collection->getWatchFiles()));
+			$watchFiles = array_values($watchFiles);
+		} else {
+			$watchFiles = [];
+		}
 
 		return $this->generateFiles($files, $watchFiles);
 	}

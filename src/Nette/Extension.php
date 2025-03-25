@@ -12,8 +12,8 @@ use Nette\Schema\Expect;
 use Nette\Schema\Helpers as SchemaHelpers;
 use Nette\Schema\Processor;
 use Nette\Schema\Schema;
+use Nette\Utils\FileInfo;
 use Nette\Utils\Finder;
-use SplFileInfo;
 use WebLoader\BatchCollection;
 use WebLoader\Compiler as WebloaderCompiler;
 use WebLoader\Contract\IWebloaderAssetProvider;
@@ -295,7 +295,7 @@ class Extension extends CompilerExtension
 
 				$foundFilesList = [];
 				foreach ($finder as $foundFile) {
-					/** @var SplFileInfo $foundFile */
+					/** @var FileInfo $foundFile */
 					$foundFilesList[] = $foundFile->getPathname();
 				}
 

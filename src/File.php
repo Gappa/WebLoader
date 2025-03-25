@@ -36,7 +36,7 @@ final class File
 	}
 
 
-	public function getLastModified(): ?int
+	public function getLastModified(): int
 	{
 		return $this->file->getMTime();
 	}

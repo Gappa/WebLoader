@@ -33,13 +33,40 @@ class ScssFilter
 
 	public function __invoke(string $code, Compiler $loader, string $file): string
 	{
-		$file = (string) $file;
-
 		if (pathinfo($file, PATHINFO_EXTENSION) === 'scss') {
-			$this->getScssC()->setImportPaths(['', pathinfo($file, PATHINFO_DIRNAME) . '/']);
-			return $this->getScssC()->compile($code);
+
+			$paths = [];
+
+			$cwd = getcwd();
+
+			if ($cwd === false) {
+				return $code;
+			}
+
+			$this->getScssC()->setImportPaths($this->getImportPaths($file));
+			$result = $this->getScssC()->compileString($code);
+			return $result->getCss();
 		}
 
-		return (string) $code;
+		return $code;
+	}
+
+
+	/**
+	 * @return list<string>
+	 */
+	private function getImportPaths(string $file): array
+	{
+		$paths = [];
+
+		$cwd = getcwd();
+
+		if ($cwd !== false) {
+			$paths[] = $cwd;
+		}
+
+		$paths[] = pathinfo($file, PATHINFO_DIRNAME) . '/';
+
+		return $paths;
 	}
 }

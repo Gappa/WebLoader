@@ -14,8 +14,8 @@ use WebLoader\Compiler;
  */
 class TypeScriptFilter
 {
-	/** @var array<string, string>|null */
-	private ?array $env;
+	/** @var array<string, string> */
+	private array $env;
 
 
 	/** @param array<string, string> $env */

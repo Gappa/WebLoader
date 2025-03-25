@@ -102,7 +102,7 @@ class CompilerTest extends TestCase
 
 		$file = $this->generateFile();
 
-		$this->assertTrue(is_numeric($file->getLastModified()) && $file->getLastModified() > 0, 'Generate does not provide last modified timestamp correctly.');
+		$this->assertTrue($file->getLastModified() && $file->getLastModified() > 0, 'Generate does not provide last modified timestamp correctly.');
 
 		$content = file_get_contents($this->object->getOutputDir() . '/' . $file->getFileName());
 
@@ -114,7 +114,6 @@ class CompilerTest extends TestCase
 	{
 		$file = $this->generateFile();
 
-		$this->assertIsArray($file->getSourceFiles());
 		$this->assertCount(3, $file->getSourceFiles());
 		$this->assertFileExists($file->getSourceFiles()[0]);
 	}
