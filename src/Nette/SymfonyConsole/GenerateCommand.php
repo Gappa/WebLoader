@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WebLoader\Nette\SymfonyConsole;
 
 use Nette\DI\Container;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -14,11 +15,9 @@ use WebLoader\Compiler;
 /**
  * Generate Command
  */
+#[AsCommand(name: 'webloader:generate', description: 'Generate files.')]
 class GenerateCommand extends Command
 {
-
-	/** @var string */
-	protected static $defaultName = 'webloader:generate';
 
 	/** @var Compiler[] */
 	private array $compilers = [];
@@ -37,9 +36,7 @@ class GenerateCommand extends Command
 
 	protected function configure(): void
 	{
-		$this->setName(self::$defaultName)
-			->setDescription('Generates files.')
-			->addOption('force', 'f', InputOption::VALUE_NONE, 'Generate if not modified.');
+		$this->addOption('force', 'f', InputOption::VALUE_NONE, 'Generate if not modified.');
 	}
 
 
