@@ -4,69 +4,27 @@ declare(strict_types=1);
 
 namespace WebLoader\Filter;
 
-use ScssPhp\ScssPhp\Compiler as ScssCompiler;
 use WebLoader\Compiler;
+use ScssPhp\ScssPhp\Compiler as ScssCompiler;
 
-/**
- * Scss CSS filter
- *
- * @author Roman Matěna
- * @license MIT
- */
-class ScssFilter
+final class ScssFilter
 {
-	public function __construct(private ?ScssCompiler $sc = null)
+
+	private function getCompiler(): ScssCompiler
 	{
-	}
-
-
-	private function getScssC(): ScssCompiler
-	{
-		// lazy loading
-		if (empty($this->sc)) {
-			$this->sc = new ScssCompiler;
-		}
-
-		return $this->sc;
+		return new ScssCompiler;
 	}
 
 
 	public function __invoke(string $code, Compiler $loader, string $file): string
 	{
 		if (pathinfo($file, PATHINFO_EXTENSION) === 'scss') {
-
-			$paths = [];
-
-			$cwd = getcwd();
-
-			if ($cwd === false) {
-				return $code;
-			}
-
-			$this->getScssC()->setImportPaths($this->getImportPaths($file));
-			$result = $this->getScssC()->compileString($code);
+			$compiler = $this->getCompiler();
+			$compiler->setImportPaths([pathinfo($file, PATHINFO_DIRNAME) . '/']);
+			$result = $compiler->compileString($code);
 			return $result->getCss();
 		}
 
 		return $code;
-	}
-
-
-	/**
-	 * @return list<string>
-	 */
-	private function getImportPaths(string $file): array
-	{
-		$paths = [];
-
-		$cwd = getcwd();
-
-		if ($cwd !== false) {
-			$paths[] = $cwd;
-		}
-
-		$paths[] = pathinfo($file, PATHINFO_DIRNAME) . '/';
-
-		return $paths;
 	}
 }
