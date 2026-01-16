@@ -25,6 +25,7 @@
 		"nette/utils": "^4.0",
 		"ext-json": "*",
 		"nette/schema": "^1.2",
+		"nette/finder": "^3.0",
 		"latte/latte": "^3.0",
 		"tracy/tracy": "^2.8"
     },
