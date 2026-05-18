@@ -35,4 +35,17 @@ class JsMinFilterTest extends TestCase
 		);
 		$this->assertSame(file_get_contents(__DIR__ . '/../fixtures/jsmin.js.expected'), $minified);
 	}
+
+
+	public function testIgnoreAlreadyMinified(): void
+	{
+		$filter = new JsMinFilter(true);
+		$file = __DIR__ . '/../fixtures/js.min.js';
+		$minified = $filter->__invoke(
+			(string) file_get_contents($file),
+			$this->compiler,
+			$file
+		);
+		$this->assertSame(file_get_contents(__DIR__ . '/../fixtures/js.min.js.expected'), $minified);
+	}
 }

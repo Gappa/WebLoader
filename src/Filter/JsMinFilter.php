@@ -6,16 +6,22 @@ namespace WebLoader\Filter;
 use JShrink\Minifier;
 use WebLoader\Compiler;
 
-class JsMinFilter
+readonly class JsMinFilter
 {
-	public function __invoke(string $code, Compiler $compiler, string $file = ''): ?string
+	public function __construct(
+		private bool $ignoreMinified = false,
+	)
 	{
-		$result = Minifier::minify($code);
+	}
 
-		if (!$result) {
-			return null;
-		} else {
-			return (string) $result;
+
+	public function __invoke(string $code, Compiler $compiler, string $file = ''): string
+	{
+		if ($this->ignoreMinified === true && str_ends_with($file, '.min.js')) {
+			return $code;
 		}
+
+		$result = Minifier::minify($code);
+		return (string) $result;
 	}
 }

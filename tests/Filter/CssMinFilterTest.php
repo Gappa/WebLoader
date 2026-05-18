@@ -35,4 +35,19 @@ class CssMinFilterTest extends TestCase
 		);
 		$this->assertSame(file_get_contents(__DIR__ . '/../fixtures/cssmin.css.expected'), $minified);
 	}
+
+
+	public function testIgnoreAlreadyMinified(): void
+	{
+		$filter = new CssMinFilter(true);
+
+		$file = __DIR__ . '/../fixtures/css.min.css';
+		$minified = $filter->__invoke(
+			(string) file_get_contents($file),
+			$this->compiler,
+			$file
+		);
+
+		$this->assertSame(file_get_contents(__DIR__ . '/../fixtures/css.min.css.expected'), $minified);
+	}
 }
