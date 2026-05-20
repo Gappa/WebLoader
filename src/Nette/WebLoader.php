@@ -9,6 +9,7 @@ use Nette\Utils\Html;
 use WebLoader\Compiler;
 use WebLoader\Enum\RenderMode;
 use WebLoader\File;
+use WebLoader\FileCollection;
 
 /**
  * Web loader
@@ -78,7 +79,16 @@ abstract class WebLoader extends Control
 	 */
 	public function render(): void
 	{
-		$file = $this->compiler->generate();
+		$hasArgs = func_num_args() > 0;
+
+		if ($hasArgs) {
+			$backup = $this->compiler->getFileCollection();
+			$newFiles = new FileCollection($backup->getRoot());
+			$newFiles->addFiles(func_get_args());
+			$this->compiler->setFileCollection($newFiles);
+		}
+
+		$file = $this->compiler->generate();		
 
 		if ($file === null) {
 			return;
@@ -91,6 +101,10 @@ abstract class WebLoader extends Control
 		};
 
 		echo $output, PHP_EOL;
+
+		if ($hasArgs) {
+			$this->compiler->setFileCollection($backup);
+		}
 	}
 
 
