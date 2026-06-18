@@ -35,7 +35,6 @@ class LoaderFactory
 
 	public function isBatchRendered(string $batchName): bool
 	{
-		bdump($this->renderedBatches);
 		return isset($this->renderedBatches[$batchName]);
 	}
 
