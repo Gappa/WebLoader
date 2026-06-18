@@ -35,7 +35,12 @@ class Compiler
 	private ?string $nonce = null;
 
 
-	public function __construct(IFileCollection $files, IOutputNamingConvention $convention, string $outputDir)
+	public function __construct(
+		IFileCollection $files,
+		IOutputNamingConvention $convention,
+		string $outputDir,
+		private readonly string $name,
+	)
 	{
 		$this->collection = $files;
 		$this->namingConvention = $convention;
@@ -46,18 +51,28 @@ class Compiler
 	/**
 	 * Create compiler with predefined css output naming convention
 	 */
-	public static function createCssCompiler(IFileCollection $files, string $outputDir): self
+	public static function createCssCompiler(IFileCollection $files, string $outputDir, string $name): self
 	{
-		return new self($files, DefaultOutputNamingConvention::createCssConvention(), $outputDir);
+		return new self(
+			$files,
+			DefaultOutputNamingConvention::createCssConvention(),
+			$outputDir,
+			$name,
+		);
 	}
 
 
 	/**
 	 * Create compiler with predefined javascript output naming convention
 	 */
-	public static function createJsCompiler(IFileCollection $files, string $outputDir): self
+	public static function createJsCompiler(IFileCollection $files, string $outputDir, string $name): self
 	{
-		return new self($files, DefaultOutputNamingConvention::createJsConvention(), $outputDir);
+		return new self(
+			$files,
+			DefaultOutputNamingConvention::createJsConvention(),
+			$outputDir,
+			$name,
+		);
 	}
 
 
@@ -211,6 +226,12 @@ class Compiler
 		}
 
 		return $this->generateFiles($files, $watchFiles);
+	}
+
+
+	public function getName(): string
+	{
+		return $this->name;
 	}
 
 

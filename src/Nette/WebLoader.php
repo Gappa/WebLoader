@@ -21,9 +21,10 @@ abstract class WebLoader extends Control
 	private RenderMode $renderMode = RenderMode::LINK;
 
 	public function __construct(
-		private Compiler $compiler,
+		protected Compiler $compiler,
+		protected LoaderFactory $loaderFactory,
 		private string $tempPath,
-		private readonly bool $appendLastModified
+		private readonly bool $appendLastModified,
 	) {
 	}
 
@@ -78,6 +79,10 @@ abstract class WebLoader extends Control
 	 */
 	public function render(): void
 	{
+		if ($this->isRendered()) {
+			return;
+		}
+
 		$file = $this->compiler->generate();
 
 		if ($file === null) {
@@ -89,6 +94,8 @@ abstract class WebLoader extends Control
 			RenderMode::LINK => $this->getElement($file),
 			RenderMode::INLINE => $this->getInlineElement($file),
 		};
+
+		$this->markAsRendered();
 
 		echo $output, PHP_EOL;
 	}
@@ -117,5 +124,17 @@ abstract class WebLoader extends Control
 		}
 
 		return $path;
+	}
+
+
+	protected function isRendered(): bool
+	{
+		return $this->loaderFactory->isBatchRendered($this->compiler->getName());
+	}
+
+
+	protected function markAsRendered(): void
+	{
+		$this->loaderFactory->markBatchAsRendered($this->compiler->getName());
 	}
 }

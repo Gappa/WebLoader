@@ -17,21 +17,36 @@ class LoaderFactory
 		private array $tempPaths,
 		private string $extensionName,
 		private IRequest $httpRequest,
-		private Container $diContainer
-	) {
+		private Container $diContainer,
+	)
+	{
+	}
+
+
+	/** @var array<string, true> */
+	private array $renderedBatches = [];
+
+
+	public function markBatchAsRendered(string $batchName): void
+	{
+		$this->renderedBatches[$batchName] = true;
+	}
+
+
+	public function isBatchRendered(string $batchName): bool
+	{
+		bdump($this->renderedBatches);
+		return isset($this->renderedBatches[$batchName]);
 	}
 
 
 	private function getCompiler(string $name, string $type): Compiler
 	{
+		$serviceName = $this->extensionName . '.' . $type . ucfirst($name) . 'Compiler';
+
 		/** @var Compiler $compiler */
-		$compiler = $this->diContainer->getService(
-			$this->extensionName .
-			'.' .
-			$type .
-			ucfirst($name) .
-			'Compiler'
-		);
+		$compiler = $this->diContainer->getService($serviceName);
+
 		return $compiler;
 	}
 
@@ -40,7 +55,13 @@ class LoaderFactory
 	{
 		$compiler = $this->getCompiler($name, 'css');
 		$this->modifyConvention($compiler->getOutputNamingConvention(), $name);
-		return new CssLoader($compiler, $this->formatTempPath($name, $compiler->isAbsoluteUrl()), $appendLastModified);
+
+		return new CssLoader(
+			$compiler,
+			$this,
+			$this->formatTempPath($name, $compiler->isAbsoluteUrl()),
+			$appendLastModified,
+		);
 	}
 
 
@@ -48,7 +69,13 @@ class LoaderFactory
 	{
 		$compiler = $this->getCompiler($name, 'js');
 		$this->modifyConvention($compiler->getOutputNamingConvention(), $name);
-		return new JavaScriptLoader($compiler, $this->formatTempPath($name, $compiler->isAbsoluteUrl()), $appendLastModified);
+
+		return new JavaScriptLoader(
+			$compiler,
+			$this,
+			$this->formatTempPath($name, $compiler->isAbsoluteUrl()),
+			$appendLastModified,
+		);
 	}
 
 

@@ -209,6 +209,7 @@ class Extension extends CompilerExtension
 				'@' . $filesServiceName,
 				$config['namingConvention'],
 				$config['tempDir'],
+				$name,
 			]);
 
 		$compiler
@@ -347,8 +348,13 @@ class Extension extends CompilerExtension
 	private function extractBatchesFromExtensions(): void
 	{
 		// Extension batches
-		/** @var array<IWebloaderAssetProvider> $batchProviders */
-		$batchProviders = $this->compiler->getExtensions(IWebloaderAssetProvider::class);
+		/**
+		 * @var array<IWebloaderAssetProvider> $batchProviders
+		 * @phpstan-ignore argument.templateType
+		 */
+		$batchProviders = $this->compiler->getExtensions(
+			IWebloaderAssetProvider::class // @phpstan-ignore argument.type
+		);
 
 		if (empty($batchProviders)) {
 			return;

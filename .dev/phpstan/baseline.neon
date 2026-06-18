@@ -1,0 +1,13 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Offset ''combined'' might not exist on non\-empty\-array\{original\?\: int\<0, max\>, combined\?\: int\<0, max\>\}\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: ../../src/Nette/Diagnostics/Panel.php
+
+		-
+			message: '#^Offset ''original'' might not exist on non\-empty\-array\{original\?\: int\<0, max\>, combined\?\: int\<0, max\>\}\.$#'
+			identifier: offsetAccess.notFound
+			count: 1
+			path: ../../src/Nette/Diagnostics/Panel.php

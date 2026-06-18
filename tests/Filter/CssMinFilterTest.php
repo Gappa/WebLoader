@@ -21,7 +21,7 @@ class CssMinFilterTest extends TestCase
 
 		$files = new FileCollection(__DIR__ . '/../fixtures');
 		@mkdir($outputDir = __DIR__ . '/../temp/');
-		$this->compiler = new Compiler($files, new DefaultOutputNamingConvention(), $outputDir);
+		$this->compiler = new Compiler($files, new DefaultOutputNamingConvention(), $outputDir, 'test');
 	}
 
 

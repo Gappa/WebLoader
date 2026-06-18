@@ -44,7 +44,7 @@ class CompilerTest extends TestCase
 			return 'webloader-' . md5(join(',', $files));
 		});
 
-		$this->object = new Compiler($fileCollection, $convention, __DIR__ . '/temp');
+		$this->object = new Compiler($fileCollection, $convention, __DIR__ . '/temp', 'test');
 
 		foreach ($this->getTempFiles() as $file) {
 			unlink($file);
